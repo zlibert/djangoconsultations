@@ -2,10 +2,9 @@
 
 Django medical consultation ticket system
 TODO
-  - Finish Consultations CRUD (detail form POST)
-  - Finish Users CRUD (register user)
-
-  - Create Messages Model and CRUD
+  - Create Profile CRUD
+  - Avoid repeating some things in templates (DRY)
+  - 
 
 **Requires:**
 
