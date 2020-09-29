@@ -1,0 +1,53 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1>Add consultation</h1>
+</div>
+{% if messages %}
+    {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}	
+    {% endfor %}
+{% endif %}
+
+<div class="container-fluid">   
+    <form method="post" enctype="multipart/form-data" action="" id="consultation_form" novalidate="">
+        {% csrf_token %}
+        <div>
+
+            {{ form.as_p }}
+        
+            {{ formset.management_form }}
+            <table>
+                {% for uploadform in formset %}
+                    {{ uploadform }}
+                {% endfor %}
+            </table>
+
+
+
+            <br>
+            <div class="submit-row">
+
+            <input type="submit" value="Save" class="btn btn-success" name="_save">
+            <a href="{% url 'consultations:index' %}" class="btn btn-secondary">Cancel</a>
+
+            </div>
+
+        </div>
+    </form>
+</div>
+
+    
+    <br class="clear">
+  </div>
+
+{% endblock %}
