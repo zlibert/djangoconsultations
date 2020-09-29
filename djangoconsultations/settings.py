@@ -1,18 +1,26 @@
 from pathlib import Path
 import os
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.core.exceptions import ImproperlyConfigured
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Handling Key Import Errors
+def get_env_variable(var_name):
+    """ Get the environment variable or return exception """
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "Set the %s environment variable" % var_name
+        raise ImproperlyConfigured(error_msg)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#8r05iz=320n3!!fn6-uc_f*99*bl4f_5vx&h%9qb*-6ap#a)s'
+SECRET_KEY = get_env_variable('DJANGOCONSULTATIONS_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = False
+ENV_ROLE = get_env_variable('DJANGOCONSULTATIONS_ENV_ROLE')
+if ENV_ROLE == 'development':
+    DEBUG = True
+    
 ALLOWED_HOSTS = []
 
 
