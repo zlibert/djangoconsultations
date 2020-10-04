@@ -3,6 +3,7 @@ import os
 from django.core.exceptions import ImproperlyConfigured
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # Handling Key Import Errors
 def get_env_variable(var_name):
     """ Get the environment variable or return exception """
@@ -18,10 +19,12 @@ SECRET_KEY = get_env_variable('DJANGOCONSULTATIONS_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ENV_ROLE = get_env_variable('DJANGOCONSULTATIONS_ENV_ROLE')
+allowed = get_env_variable('DJANGOCONSULTATIONS_ALLOWED_HOSTS').split(",")
+ALLOWED_HOSTS = allowed
+
 if ENV_ROLE == 'development':
     DEBUG = True
-    
-ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -73,11 +76,14 @@ WSGI_APPLICATION = 'djangoconsultations.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': get_env_variable('DJANGOCONSULTATIONS_DB_NAME'),
+        'USER': get_env_variable('DJANGOCONSULTATIONS_DB_USER'),
+        'PASSWORD': get_env_variable('DJANGOCONSULTATIONS_DB_PASSWORD'),
+        'HOST': get_env_variable('DJANGOCONSULTATIONS_DB_HOST'),
+        'PORT': get_env_variable('DJANGOCONSULTATIONS_DB_PORT')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -119,5 +125,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/media/'
-#MEDIA_ROOT = os.path.join(BASE_DIR, '/static/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')

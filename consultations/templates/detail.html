@@ -122,6 +122,7 @@
                 </tr>
                 <th>Uploads</th>
                     {% for file in uploadedfiles %}
+                        <td>{{ file.description }}</td>
                         <td><a href="http://{{ request.get_host }}/media/{{ file.filecontent }}">http://{{ request.get_host }}/media/{{ file.filecontent }}</a></td>
                     {% endfor %}
                 </tr>

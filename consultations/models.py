@@ -2,13 +2,14 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 
+
 class Consultation(models.Model):
-    SEX_CHOICES = [ ('M', 'Male') , ('F', 'Female') ]
-    SLEEP_CHOICES = [ ('B', 'Bad') , ('R', 'Regular'), ('G', 'Good') ]
-    STRESSLEVEL_CHOICES = [ ('L', 'Low') , ('M', 'Medium'), ('H', 'High') ]
-    DEFECATION_CHOICES = [ ('<1', 'Less than one') , ('1', 'Once'), ('2', 'Twice'), ('3','Thrice'), ('>3','More than thrice') ]
-    STATUS_CHOICES = [ ('Open', 'Open') , ('Closed', 'Closed'), ('Resolved', 'Resolved'), ('Rejected', 'Rejected'), ('Pending', 'Pending'), \
-        ('Waiting for Patient', 'Waiting for Patient'), ('Waiting for Payment', 'Waiting for Payment') ]
+    SEX_CHOICES = [('M', 'Male'), ('F', 'Female')]
+    SLEEP_CHOICES = [('B', 'Bad'), ('R', 'Regular'), ('G', 'Good')]
+    STRESSLEVEL_CHOICES = [('L', 'Low'), ('M', 'Medium'), ('H', 'High')]
+    DEFECATION_CHOICES = [('<1', 'Less than one'), ('1', 'Once'), ('2', 'Twice'), ('3', 'Thrice'), ('>3', 'More than thrice')]
+    STATUS_CHOICES = [('Open', 'Open'), ('Closed', 'Closed'), ('Resolved', 'Resolved'), ('Rejected', 'Rejected'), ('Pending', 'Pending'),
+                      ('Waiting for Patient', 'Waiting for Patient'), ('Waiting for Payment', 'Waiting for Payment')]
 
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='consultations_created')
     assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='consultations_assigned', blank=True, null=True)
@@ -50,8 +51,9 @@ class UploadedFile(models.Model):
     description = models.CharField(max_length=255)
     filecontent = models.FileField('File', upload_to='uploads/')
 
+
 class Message(models.Model):
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add = True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
