@@ -6,13 +6,6 @@ media
 */__pycache__
 uploads
 
-.env
-.env.dev
-.env.prod
-.env.staging
-.env.prod.db
-.env.staging.db
-.env.dev.db
 
 .vscode/* 
 !.vscode/settings.json 

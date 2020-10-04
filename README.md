@@ -19,11 +19,13 @@ TODO:
 
 To start running a dev environment with postgres db, nginx and gunicorn containers you may use:
 
-    docker-compose up -d
+```
+docker-compose -f docker-compose.yml up -d --build
+```
 
 Simple production environment could be run using:
 ```
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
 But default port is 1337 to avoid conflicts if your server is already using 80 port with another service.
 
