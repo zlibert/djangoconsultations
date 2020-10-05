@@ -1,0 +1,35 @@
+name: Merge owner's Pull Request
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+  jobs:
+    lint:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+
+      - name: flake8 and pylint
+        run: |
+          pip install -r requirements.txt
+          flake8 --ignore=E501,F401 .
+          pylint --errors-only --disable=C0301 --disable=C0326 .
+
+    merge:
+      if: github.actor == 'zlibert'
+      needs: [lint]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v1
+        - uses: hmarr/auto-approve-action@v2.0.0
+          with: 
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+
+        - uses: managedkaos/merge-pull-request@v1.2
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
