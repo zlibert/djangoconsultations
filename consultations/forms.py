@@ -25,6 +25,7 @@ class ConsultationForm(forms.ModelForm):
             'stresslevel',
             'workhours',
             'bowelmovements',
+            'alcohol_use',
             'previous_conditions',
             'family_history',
             'current_medications',
