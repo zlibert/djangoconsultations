@@ -24,7 +24,6 @@ ALLOWED_HOSTS = allowed
 
 if ENV_ROLE == 'development':
     DEBUG = True
-    ALLOWED_HOSTS = []
 
 
 # Application definition
