@@ -14,11 +14,10 @@ jobs:
       with:
         python-version: 3.8
 
-    - name: flake8 and pylint
+    - name: flake8
       run: |
         pip install -r requirements.txt
         flake8 --ignore=E501,F401 .
-        pylint --errors-only --disable=C0301 --disable=C0326 .
 
   merge:
     if: github.actor == 'zlibert'
