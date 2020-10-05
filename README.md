@@ -40,7 +40,7 @@ docker exec -ti djangoconsultations_web_1 sh
 
 python manage.py flush --no-input  #  delete database content
 python manage.py migrate  #  apply migrations to the DB
-python manage.py collecstatic  #  create static files
+python manage.py collectstatic  #  create static files - not for development -
 python manage.py createsuperuser  # create new admin user
 ```
 - Go to your browser, open URL: yourdomain:port/admin
