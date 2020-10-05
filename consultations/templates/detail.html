@@ -1,0 +1,278 @@
+{% extends "base_generic.html" %}
+{% load static %}
+  
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}	
+    {% endfor %}
+{% endif %}
+
+<h1>Consultation Number {{ consultation.id }}</h1>
+
+<div class="container-fluid">   
+    <h2>Details</h2>
+        <table class="table">
+            <tbody>
+                <tr>
+                <th>ID</th>
+                    <td>{{ consultation.id }}</td>
+                </tr>
+                <tr>
+                <th>Timestamp</th>
+                    <td>{{ consultation.timestamp }}</td>
+                </tr>
+                <th>Name</th>
+                <td>{{ requester.first_name }} {{ requester.last_name }}</td>
+                </tr>
+                <tr>
+                <th>Age</th>
+                    <td>{{ consultation.age }}</td>
+                </tr>
+                <tr>
+                <th>Sex</th>
+                    <td>{{ consultation.sex }}</td>
+                </tr>
+                <tr>
+                <th>Height</th>
+                    <td>{{ consultation.height }} cm</td>
+                </tr>
+                <tr>
+                <th>Weight</th>
+                    <td>{{ consultation.weight }} Kg</td>
+                </tr>
+                <tr>
+                <th>Avg. Waking Temp.</th>
+                    <td>{{ consultation.avg_waking_temp }} ºC</td>
+                </tr>
+                <tr>
+                <th>Avg. Waking Pulse</th>
+                    <td>{{ consultation.avg_waking_pulse }} ppm</td>
+                </tr>
+                <tr>
+                <th>Avg. Afternoon Temp.</th>
+                    <td>{{ consultation.avg_afternoon_temp }} ºC</td>
+                </tr>
+                <tr>
+                <th>Avg. Afternoon Pulse</th>
+                    <td>{{ consultation.avg_afternoon_pulse }} ppm</td>
+                </tr>
+                <tr>
+                <th>Avg. Sys. Blood Pressure</th>
+                    <td>{{ consultation.avg_sys_bp }} mmHg</td>
+                </tr>
+                <tr>
+                <th>Avg. Dias. Blood Pressure</th>
+                    <td>{{ consultation.avg_dias_bp }} mmHg</td>
+                </tr>
+                <tr>
+                <th>Bodyfat percentage</th>
+                    <td>{{ consultation.bodyfat }} %</td>
+                </tr>
+                <tr>
+                <th>Country</th>
+                    <td>{{ consultation.country }}</td>
+                </tr>
+                <tr>
+                <th>City</th>
+                    <td>{{ consultation.city }}</td>
+                </tr>
+                <tr>
+                <th>Avg. Artificial Light per day</th>
+                    <td>{{ consultation.avg_artificial_light }} Hours</td>
+                </tr>
+                <th>Avg. Sleep per day</th>
+                    <td>{{ consultation.avg_sleep_hours }} Hours</td>
+                </tr>
+                <th>Avg. Sleep quality</th>
+                    <td>{{ consultation.avg_sleep_quality }}</td>
+                </tr>
+                <th>Stress Level</th>
+                    <td>{{ consultation.stresslevel }}</td>
+                </tr>
+                <th>Work per day</th>
+                    <td>{{ consultation.workhours }} Hours</td>
+                </tr>
+                <th>Bowel movements</th>
+                    <td>{{ consultation.bowelmovements }} per day</td>
+                </tr>
+                <th>Previous Conditions</th>
+                    <td>{{ consultation.previous_conditions }}</td>
+                </tr>
+                <th>Family History</th>
+                    <td>{{ consultation.family_history }}</td>
+                </tr>                
+                <th>Current Medications</th>
+                    <td>{{ consultation.current_medications }}</td>
+                </tr>
+                <th>Current Symptoms</th>
+                    <td>{{ consultation.current_symptoms }}</td>
+                </tr>                
+                <th>Expectations</th>
+                    <td>{{ consultation.expectations }}</td>
+                </tr>
+                <th>Uploads</th>
+                    {% for file in uploadedfiles %}
+                        <td>{{ file.description }}</td>
+                        <td><a href="http://{{ request.get_host }}/media/{{ file.filecontent }}">http://{{ request.get_host }}/media/{{ file.filecontent }}</a></td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table">
+            <th>Status</th>
+            <td>{{ consultation.status }}</td>
+            </tr>
+            <th>Adviser</th>
+                <td>{{ consultation.assigned_to }}</td>
+            </tr>
+        </table>
+        <br>
+        <h3>Payment</h3>
+        <table class="table">
+            <th>Price</th>
+            <td>{% if consultation.price == None %} Not set yet {% else %} {{ consultation.price }} USD {% endif %} </td>
+            </tr>
+            <th>Payment Information</th>
+                <td>{{ consultation.paymentinfo }}</td>
+            </tr>
+        </table>
+</div> 
+<div id="chatDiv" class="container-fluid">   
+    <h2>Messages</h2>
+    {% if chat %}
+        <table class="table">
+            <thead class="thead-light">
+            <tr class="d-flex">
+                <th scope="col" class="col-2">Received at</th>
+                <th scope="col" class="col-2">User</th>
+                <th scope="col" class="col-8">Message</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for msg in chat %}
+            <tr class="d-flex">
+                <td scope="col" class="col-2">{{ msg.timestamp }}</th>
+                <td class="col-2">{{msg.sender }}</td>
+                <td class="col-8">{{msg.text }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">No messages yet. Replies usually takes up to 2 weekdays.</th>
+            </tr>
+            </thead>
+        </table>
+    {% endif %}
+    <div class="container-fluid">
+        <form method="post" action="#">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="chatText">Text:</label>
+                <input type="text" class="form-control" id="chatText" name="chat-message" minlength="1"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" name="send-message" value="send">Send Message</button>
+        </form>
+    </div>
+</div> 
+<br>
+
+{% if UserIsStaff %}
+<form method="post" action="" id="ConsultationStaffForm">
+    {% csrf_token %}
+    <div class="container-fluid">
+        {% if consultation.assigned_to == Null %}
+            <h3>Take Consultation</h3>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="assignConsultation" name="assignConsultation" value="True">
+                <label class="form-check-label" for="assignConsultation">Yes</label>
+            </div>
+            <br>
+        {% endif %}
+        <h3>Set Status</h3>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="statusOpen" value="Open" disabled {% if consultation.status == 'Open' %} checked {% endif %}>
+            <label class="form-check-label" for="status0">
+            Open
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="statusPending" value="Pending" {% if consultation.status == 'Pending' %} checked {% endif %}>
+            <label class="form-check-label" for="status1">
+            Pending
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="statusWaitingForPatient" value="Waiting for Patient" {% if consultation.status == 'Waiting for Patient' %} checked {% endif %}>
+            <label class="form-check-label" for="status2">
+            Waiting for Patient
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="statusWaitingForPayment" value="Waiting for Payment" {% if consultation.status == 'Waiting for Payment' %} checked {% endif %}>
+            <label class="form-check-label" for="status3">
+            Waiting for Payment
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="statusResolved" value="Resolved" {% if consultation.status == 'Resolved' %} checked {% endif %}>
+            <label class="form-check-label" for="status4">
+            Resolved
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="statusRejected" value="Rejected" {% if consultation.status == 'Rejected' %} checked {% endif %}>
+            <label class="form-check-label" for="status5">
+            Rejected
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="paymentInfo">Payment Info:</label>
+            <input type="text" class="form-control" id="paymentInfo" name="paymentInfo" minlength="1" placeholder="Account, currency, amount equivalency or anything necessary to pay" value="{{ consultation.paymentinfo }}"></textarea>
+            <label for="price">Payment Amount in USD:</label>
+            <input type="number" class="form-control" id="price" name="price" min="0" value="{{ consultation.price }}">
+        </div> 
+    </div>
+
+    <br>
+
+    <div class="container-fluid">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-4" role="group" aria-label="First group">
+                <input type="submit" value="Save" class="btn btn-success" name="_save">
+                <a href="{% url 'consultations:index' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% else %}
+<div class="container-fluid">
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-4" role="group" aria-label="First group">
+            <button type="button" class="btn btn-light" onclick="location.href='{% url 'consultations:change' consultation.id %}'">Edit</button>
+        </div>
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <button type="button" class="btn btn-danger" onclick="if (confirm('Are you sure you want to delete the consultation?')){window.location = './delete'}">Delete Consultation</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
