@@ -34,6 +34,7 @@ class Consultation(models.Model):
     stresslevel = models.CharField('Level of daily stress', max_length=1, choices=STRESSLEVEL_CHOICES)
     workhours = models.IntegerField('Work hours per day')
     bowelmovements = models.CharField('Average bowel movements per day', max_length=2, choices=DEFECATION_CHOICES, default='1')
+    alcohol_use = models.TextField('Alcohol Consumption', blank=True)
     previous_conditions = models.TextField('Previous diagnosed conditions', blank=True)
     family_history = models.TextField('Family diagnosed conditions', blank=True)
     current_medications = models.TextField('Current drugs or medications', blank=True)
