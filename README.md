@@ -27,10 +27,11 @@ Simple production environment could be run using:
 ```
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
-But default port is 1337 to avoid conflicts if your server is already using 80 port with another service.
+By default port is 1337 to avoid conflicts if your server is already using 80 port with another service.
 
 If it's the first time you run it, you need to create basic groups and users:
 - Set your .env* files parameters correctly (database name, ports, etc)
+- Create your database
 - Get inside the web container:
 - Create admin user:
     
